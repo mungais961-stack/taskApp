@@ -1,0 +1,33 @@
+package com.simon.taskapp.domain.dto;
+
+import com.simon.taskapp.domain.entities.enums.TaskPriority;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+
+import java.time.LocalDate;
+
+public record CreateTaskRequestDto(
+        @NotBlank(message=ERROR_MESSAGE_TITLE_LENGTH)
+        @Length(max=255,message=ERROR_MESSAGE_TITLE_LENGTH)
+        String title,
+        @Nullable
+        @Length(max=1000,message=ERROR_MESSAGE_DESCRIPTION_LENGTH)
+        String description,
+        @Nullable
+        @FutureOrPresent(message=ERROR_MESSAGE_DUEDATE_FUTURE)
+        LocalDate dueDate,
+        @NotNull(message=EEROR_MESSAGE_PRIORITY)
+        TaskPriority priority
+) {
+    private static final String ERROR_MESSAGE_TITLE_LENGTH =
+            "Title must be between 1 and 255 characters.";
+    private static final String ERROR_MESSAGE_DESCRIPTION_LENGTH =
+            "Description must be less than 1000 characters.";
+    private static final String ERROR_MESSAGE_DUEDATE_FUTURE=
+            "The due date has to be present or in the future.";
+    private static final String EEROR_MESSAGE_PRIORITY=
+            "Task priority must be provided.";
+}
